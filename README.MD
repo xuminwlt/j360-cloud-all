@@ -47,7 +47,8 @@ j360-cloud-all
 
 ##Environment Repository 环境变量仓库##
 ===================
-- https://github.com/xuminwlt/config-repo
+-  https://github.com/xuminwlt/config-repo
+- 
 ###The Environment resources are parametrized by three variables:###
 - {application} maps to "spring.application.name" on the client side;
 - {profile} maps to "spring.active.profiles" on the client (comma separated list); and
