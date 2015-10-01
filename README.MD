@@ -19,9 +19,10 @@ j360-cloud-all
 ```
 
 - http://localhost:8888/configserver/application.properties
+- 可以查看相关的配置信息
 
 ##spring-cloud-client##
-===================
+- 主要依赖
 ```
 <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -34,6 +35,7 @@ j360-cloud-all
 ```
 
 - http://localhost:8080/env
+
 - This is the default behaviour for any application which has the Spring Cloud Config Client on the classpath. When a config client starts up it binds to the Config Server (via the bootstrap configuration property spring.cloud.config.uri) and initializes Spring Environment with remote property sources.
   
 - The net result of this is that all client apps that want to consume the Config Server need a bootstrap.yml (or an environment variable) with the server address in spring.cloud.config.uri
@@ -46,9 +48,10 @@ j360-cloud-all
 
 
 ##Environment Repository 环境变量仓库##
-===================
+
 -  https://github.com/xuminwlt/config-repo
-- 
+
+- 环境资源配置信息
 ###The Environment resources are parametrized by three variables:###
 - {application} maps to "spring.application.name" on the client side;
 - {profile} maps to "spring.active.profiles" on the client (comma separated list); and
