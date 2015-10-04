@@ -111,6 +111,7 @@ spring:
                     profiles: development  
     ```
 - 嵌入式ConfigServer
+    - 嵌入式部署使用配合注解方式
     - 官方建议独立部署
     - The Config Server runs best as a standalone application, but if you need to you can embed it in another application. Just use the @EnableConfigServer annotation and (optionally) set spring.cloud.config.server.prefix to a path prefix, e.g. "/config", to serve the resources under a prefix. The prefix should start but not end with a "/". It is applied to the @RequestMappings in the Config Server (i.e. underneath the Spring Boot prefixes server.servletPath and server.contextPath). Another optional property that can be useful in this case is spring.cloud.config.server.bootstrap which is a flag to indicate that the server should configure itself from its own remote repository. The flag is off by default because it can delay startup, but when embedded in another application it makes sense to initialize the same way as any other application.
     
