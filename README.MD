@@ -5,8 +5,9 @@ j360-cloud-all
 
 ##spring-cloud-configserver##
 ===================
-- @EnableConfigServer
-
+- configserver提供了HTTP，为外部资源提供API配置的服务，只需要在Springboot程序中提供@EnableConfigServer注解即可。
+    - @EnableConfigServer
+    - 增加以下依赖 eureka（可选，作为discover服务器必选）
 ```
 <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -17,42 +18,21 @@ j360-cloud-all
                     <artifactId>spring-cloud-starter-eureka</artifactId>
                 </dependency>
 ```
+- 运行configserver，通过端点可以查看configserver的属性内容
+    - http://localhost:8888/configserver/application.properties
 
-- http://localhost:8888/configserver/application.properties
-
-##spring-cloud-client##
-===================
-```
-<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-```
-
-- http://localhost:8080/env
-- This is the default behaviour for any application which has the Spring Cloud Config Client on the classpath. When a config client starts up it binds to the Config Server (via the bootstrap configuration property spring.cloud.config.uri) and initializes Spring Environment with remote property sources.
-  
-- The net result of this is that all client apps that want to consume the Config Server need a bootstrap.yml (or an environment variable) with the server address in spring.cloud.config.uri
-
-###Eureka First Bootstrap##
-
-
-
-
-
-
+- 【注】本地文件系统仅仅用于测试环境，在生产环境请使用远程的git服务提供配置资源
 ##Environment Repository 环境变量仓库##
 ===================
 - https://github.com/xuminwlt/config-repo
-###The Environment resources are parametrized by three variables:###
-- {application} maps to "spring.application.name" on the client side;
-- {profile} maps to "spring.active.profiles" on the client (comma separated list); and
-- {label}
-###Spring Cloud Config Server supports a single or multiple git repositories:###
+###环境变量仓库使用3个变量:###
+- {application} 在客户端映射到"spring.application.name"
+- {profile} 在客户端映射到"spring.active.profiles"，使用逗号分隔
+- {label}这是一个服务器端功能标签“版本”的一组配置文件
+
+
+- 默认的环境变量库使用git服务，也可以使用文件系统的服务
+    -  Spring Cloud Config Server supports a single or multiple git repositories:###
 ```
 spring:
   cloud:
@@ -69,7 +49,7 @@ spring:
               pattern: local*
               uri: file:/home/configsvc/config-repo
 ```
-- Every repository can also optionally store config files in sub-directories, and patterns to search for those directories can be specified as searchPaths. 
+       - Every repository can also optionally store config files in sub-directories, and patterns to search for those directories can be specified as searchPaths. 
 ```
 spring:
   cloud:
@@ -79,7 +59,7 @@ spring:
           uri: https://github.com/spring-cloud-samples/config-repo
           searchPaths: foo,bar*
 ```
-- To use HTTP basic authentication on the remote repository add the "username" and "password" properties separately (not in the URL), e.g
+        - To use HTTP basic authentication on the remote repository add the "username" and "password" properties separately (not in the URL), e.g
 ```
 spring:
   cloud:
@@ -90,25 +70,24 @@ spring:
           username: trolley
           password: strongpassword
 ```
-- 检查环境变量仓库是否有效
-    - You can configure the Health Indicator to check more applications along with custom profiles and custom labels, e.g.
-    - You can disable the Health Indicator by setting spring.cloud.config.server.health.enabled=false.
-    ```
-      spring:
-        cloud:
-          config:
-            server:
-              health:
-                repositories:
-                  myservice:
-                    label: mylabel
-                  myservice-dev:
-                    name: myservice
-                    profiles: development  
-    ```
+- 文件系统后端
+    - 使用 spring.profiles.active=native
+
 - 嵌入式ConfigServer
     - 官方建议独立部署
-    - The Config Server runs best as a standalone application, but if you need to you can embed it in another application. Just use the @EnableConfigServer annotation and (optionally) set spring.cloud.config.server.prefix to a path prefix, e.g. "/config", to serve the resources under a prefix. The prefix should start but not end with a "/". It is applied to the @RequestMappings in the Config Server (i.e. underneath the Spring Boot prefixes server.servletPath and server.contextPath). Another optional property that can be useful in this case is spring.cloud.config.server.bootstrap which is a flag to indicate that the server should configure itself from its own remote repository. The flag is off by default because it can delay startup, but when embedded in another application it makes sense to initialize the same way as any other application.
+
+##spring-cloud-client##
+- 使用以下依赖
+```
+<dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+```
+- 配置优先启动
+    - 默认的springcloud应用程序启动行为，所有的客户端应用程序想要使用配置服务器的配置，需要：
+        -   bootstrap.yml(或一个环境变量)的服务器地址
+            - spring.cloud.config.uri(默认为 “http://localhost:8888”)。
     
-
-
+- Eureka优先启动
+    - 如果使用的是Spring CloudNetflix 和eureka service discovery，可以使用配置服务器注册Eureka
