@@ -1,7 +1,9 @@
 package me.j360.cloud.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,10 +22,17 @@ public class MessageController {
     @Value("${apply.message}")
     public String message;
 
+    @Autowired
+    private ConfigurationPropertiesConfig configurationPropertiesConfig;
+
+
     @RequestMapping("/")
     public String home() {
-
-
         return message;
+    }
+
+    @RequestMapping("/user")
+    public String user() {
+        return configurationPropertiesConfig.getUsername();
     }
 }

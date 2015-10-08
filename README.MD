@@ -98,7 +98,16 @@ spring:
 - Eureka优先启动
     - 如果使用的是Spring CloudNetflix 和eureka service discovery，可以使用配置服务器注册Eureka
     
-    
+- 环境变量刷新 
+    - post -> localhost:8080/refresh
+    - 定时
+    - 手动
+```
+The Config Server itself is stateless, so you can spin up as many as these as you need and find them via eureka. Underneath the server itself, the git implementation you point to needs to be highly available as well. So if you point to github (private or public), then git is as available as github is. If the config server can't reach git it will continue to serve what it has checked out even if it is stale.
+As far as gradual config changes, you could use a different branch and configure the canary to use that branch via spring.cloud.config.label and them merge the branch. You could also use profiles (eg application-<profilename>.properties) and configure the canary to use the specified profile.
+I think the branch makes a little more sense, because you wouldn't have to reconfigure the non-canary nodes to use the new profile each time, just configure canary to use the branch.
+Either way, the only time apps see config chages (when using spring cloud config client) is on startup or when you POST to /refresh on each node. You can also POST to /bus/refresh?destination=<servicename> if you use the Spring Cloud Bus to refresh all instances of a service at once.
+```
     
 - *基于spring cloud应用在分布式系统中的运用*
     - config
