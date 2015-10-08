@@ -1,8 +1,12 @@
 package me.j360.cloud.client;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,16 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @SpringBootApplication
-@RestController
-@EnableEurekaClient
+@EnableScheduling
+//@EnableEurekaClient
 public class Application {
 
-    @RequestMapping("/")
-    public String home() {
-        return "Hello World!";
-    }
+    @Autowired
+    private org.springframework.cloud.context.scope.refresh.RefreshScope refreshScope;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+
+    @Scheduled(cron="0/5 * *  * * ? ")   //每5秒执行一次
+    public void refreshConfigProperties(){
+        //System.out.println("start");
+        refreshScope.refreshAll();
     }
 }
