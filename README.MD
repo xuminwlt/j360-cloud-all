@@ -31,14 +31,16 @@ j360-cloud-all
 ##Environment Repository 环境变量仓库##
 ===================
 - https://github.com/xuminwlt/config-repo
+
 ###环境变量仓库使用3个变量:###
-- {application} 在客户端映射到"spring.application.name"
-- {profile} 在客户端映射到"spring.active.profiles"，使用逗号分隔
-- {label}这是一个服务器端功能标签“版本”的一组配置文件
+- 查看/env可以看到下面三个属性
+    - {application} 在客户端映射到"spring.application.name"
+    - {profile} 在客户端映射到"spring.active.profiles"，使用逗号分隔
+    - {label}这是一个服务器端功能标签“版本”的一组配置文件
 
 
 - 默认的环境变量库使用git服务，也可以使用文件系统的服务
-    -  Spring Cloud Config Server supports a single or multiple git repositories:###
+    -  Config Server支持一个或者多个git仓库
 ```
 spring:
   cloud:
@@ -55,7 +57,9 @@ spring:
               pattern: local*
               uri: file:/home/configsvc/config-repo
 ```
+
        - Every repository can also optionally store config files in sub-directories, and patterns to search for those directories can be specified as searchPaths. 
+
 ```
 spring:
   cloud:
@@ -65,7 +69,9 @@ spring:
           uri: https://github.com/spring-cloud-samples/config-repo
           searchPaths: foo,bar*
 ```
+
         - To use HTTP basic authentication on the remote repository add the "username" and "password" properties separately (not in the URL), e.g
+
 ```
 spring:
   cloud:
@@ -76,6 +82,7 @@ spring:
           username: trolley
           password: strongpassword
 ```
+
 - 文件系统后端
     - 使用 spring.profiles.active=native
 
@@ -84,12 +91,14 @@ spring:
 
 ##spring-cloud-client##
 - 使用以下依赖
+
 ```
 <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 ```
+
 - 配置优先启动
     - 默认的springcloud应用程序启动行为，所有的客户端应用程序想要使用配置服务器的配置，需要：
         -   bootstrap.yml(或一个环境变量)的服务器地址
@@ -102,6 +111,7 @@ spring:
     - post -> localhost:8080/refresh
     - 定时
     - 手动
+    
 ```
 The Config Server itself is stateless, so you can spin up as many as these as you need and find them via eureka. Underneath the server itself, the git implementation you point to needs to be highly available as well. So if you point to github (private or public), then git is as available as github is. If the config server can't reach git it will continue to serve what it has checked out even if it is stale.
 As far as gradual config changes, you could use a different branch and configure the canary to use that branch via spring.cloud.config.label and them merge the branch. You could also use profiles (eg application-<profilename>.properties) and configure the canary to use the specified profile.
@@ -109,21 +119,21 @@ I think the branch makes a little more sense, because you wouldn't have to recon
 Either way, the only time apps see config chages (when using spring cloud config client) is on startup or when you POST to /refresh on each node. You can also POST to /bus/refresh?destination=<servicename> if you use the Spring Cloud Bus to refresh all instances of a service at once.
 ```
     
-- *基于spring cloud应用在分布式系统中的运用*
+- 基于spring cloud应用在分布式系统中的运用
     - config
     - eureka
     - monitor
     - servicediscover
 
 ##Spring Cloud Netflix##
--  *应用程序+Netflix 组件构建大型分布式系统。包括*
+-  应用程序+Netflix 组件构建大型分布式系统。包括
     -   服务发现(Eureka)
     -   断路器(Hystrix) 
     -   智能路由(Zuul)
     -   客户端负载均衡(Ribbon)
 
 ###服务发现(Eureka)###
-- *Eureka Client*
+- Eureka Client
 -   注册
     - @EnableEurekaClient
     - application.yml
@@ -134,9 +144,10 @@ Either way, the only time apps see config chages (when using spring cloud config
             serviceUrl:
               defaultZone: http://localhost:8761/eureka/
     ```
--* Eureka Server
+    
+- Eureka Server
 -   @EnableEurekaServer
-- 【注】服务器有一个主页界面，HTTP API Eureka功能端点 /eureka/*。
+- 【注】服务器有一个主页界面，HTTP API Eureka功能端点 /eureka/
 ####Standalone Mode####
 -   application.yml (Standalone Eureka Server)
     -   serviceUrl指向同一个本地实例的host
@@ -262,6 +273,7 @@ spring:
     username: user
     password: secret
 ```
+
 - http端点
     - /bus/*
     - /bus/env 发送key/values键值对更新spring环境变量
