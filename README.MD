@@ -279,3 +279,5 @@ spring:
     - /bus/env 发送key/values键值对更新spring环境变量
     - /bus/refresh 更新所有的环境变量
     
+##spring cloud Zookeeper##
+- zookeeper仅仅是作为数据存储的地方，同eureka一样，但是eureka简单很多，目前推荐eureka 
