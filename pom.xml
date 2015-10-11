@@ -17,6 +17,7 @@
         <module>j360-cloud-eurekaclient</module>
         <module>j360-cloud-eurekadashboard</module>
         <module>j360-cloud-zookeeperclient</module>
+        <module>j360-cloud-cluster</module>
     </modules>
 
     <parent>
