@@ -283,4 +283,6 @@ spring:
 - zookeeper仅仅是作为数据存储的地方，同eureka一样，但是eureka简单很多，目前推荐eureka 
 
 ##Spring cloud Cluster##
-- 分布式系统集成zookeeper、redis等，实现选举、分布式锁、一致性状态检查等等
+- 分布式系统集成zookeeper、redis等，实现选举、分布式锁、一致性状态检查等等，目测该项目还未完成start自动配置
+    - zookeeper 依赖 spring-cloud-cluster-zookeeper
+    - redis 依赖 spring-cloud-cluster-redis
