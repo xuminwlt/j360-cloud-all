@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.EnvironmentTestUtils;
 import org.springframework.cloud.cluster.lock.DistributedLock;
 import org.springframework.cloud.cluster.redis.lock.RedisLockService;
